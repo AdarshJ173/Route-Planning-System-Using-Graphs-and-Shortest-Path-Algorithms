@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedy Deliveries Inc. - Route Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Speedy Deliveries Inc. - Route Planner</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="left-column">
+                <div class="panel">
+                    <h2>Add Location</h2>
+                    <div class="input-group">
+                        <input type="text" id="node-name" placeholder="Location name (e.g., A, New York)">
+                        <input type="number" id="node-x" placeholder="X position">
+                        <input type="number" id="node-y" placeholder="Y position">
+                        <button id="add-node-btn">Add Location</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Add Route</h2>
+                    <div class="input-group">
+                        <select id="edge-start"></select>
+                        <select id="edge-end"></select>
+                        <input type="number" id="edge-weight" placeholder="Distance">
+                        <button id="add-edge-btn">Add Route</button>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h2>Update Route</h2>
+                    <div class="input-group">
+                        <select id="update-edge-start"></select>
+                        <select id="update-edge-end"></select>
+                        <input type="number" id="update-edge-weight" placeholder="New distance">
+                        <button id="update-edge-btn">Update Route</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualization">
+                <div class="canvas-container">
+                    <canvas id="graph-canvas"></canvas>
+                </div>
+                <div class="panel results">
+                    <h2>Results</h2>
+                    <div id="path-result">Select locations and click "Find Path" to see results</div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="panel">
+                    <h2>Remove Elements</h2>
+                    <div class="input-group">
+                        <label for="remove-node" style="font-size: 0.8rem; margin-bottom: 2px;">Location to remove:</label>
+                        <select id="remove-node"></select>
+                        <button id="remove-node-btn">Remove Location</button>
+                    </div>
+                    <div class="input-group" style="margin-top: 10px;">
+                        <label for="remove-edge-start" style="font-size: 0.8rem; margin-bottom: 2px;">Route to remove:</label>
+                        <select id="remove-edge-start"></select>
+                        <select id="remove-edge-end"></select>
+                        <button id="remove-edge-btn">Remove Route</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Find Shortest Path</h2>
+                    <div class="input-group">
+                        <select id="path-start"></select>
+                        <select id="path-end"></select>
+                        <div class="algorithm-selection">
+                            <select id="algorithm">
+                                <option value="dijkstra">Dijkstra (Weighted)</option>
+                                <option value="bfs">BFS (Unweighted)</option>
+                            </select>
+                        </div>
+                        <button id="find-path-btn">Find Path</button>
+                    </div>
+                    
+                    <div class="algorithm-info">
+                        <button id="dijkstra-info-btn" class="info-btn"><i class="fas fa-info-circle"></i> About Dijkstra's Algorithm</button>
+                        <button id="bfs-info-btn" class="info-btn"><i class="fas fa-info-circle"></i> About BFS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Speedy Deliveries Inc. - Route Planning System</p>
+    </footer>
+
+    <!-- Algorithm explanation dialogs -->
+    <div id="dijkstra-dialog" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Dijkstra's Algorithm Explained</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="algorithm-explanation">
+                    <h3>What is Dijkstra's Algorithm?</h3>
+                    <p>Dijkstra's algorithm is a graph search algorithm that solves the single-source shortest path problem for a graph with non-negative edge weights, producing a shortest-path tree. It was conceived by computer scientist Edsger W. Dijkstra in 1956 and published three years later.</p>
+                    
+                    <h3>How Does It Work?</h3>
+                    <p>The algorithm maintains a set of visited vertices and a set of unvisited vertices. It also maintains a distance value for each vertex. The algorithm repeatedly selects the unvisited vertex with the smallest distance value, marks it as visited, and updates the distance values of its neighbors.</p>
+                    
+                    <h4>Basic Algorithm Steps:</h4>
+                    <ol>
+                        <li>Assign infinity distance value to all vertices except the source vertex (which gets a value of 0)</li>
+                        <li>Add all vertices to an unvisited set</li>
+                        <li>While the unvisited set is not empty:
+                            <ul>
+                                <li>Select the vertex with the minimum distance from the unvisited set (call it current)</li>
+                                <li>Mark current as visited (remove from unvisited set)</li>
+                                <li>For each neighbor of current:
+                                    <ul>
+                                        <li>Calculate tentative distance through current</li>
+                                        <li>If this tentative distance is less than the current distance, update the distance</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>Pseudocode</h3>
+                    <pre>
+function Dijkstra(Graph, source):
+    dist[source] ← 0
+    create vertex priority queue Q
+    
+    for each vertex v in Graph:
+        if v ≠ source
+            dist[v] ← INFINITY
+        prev[v] ← UNDEFINED
+        add v to Q
+    
+    while Q is not empty:
+        u ← vertex in Q with min dist[u]
+        remove u from Q
+        
+        for each neighbor v of u:
+            alt ← dist[u] + length(u, v)
+            if alt < dist[v]:
+                dist[v] ← alt
+                prev[v] ← u
+    
+    return dist[], prev[]
+                    </pre>
+                    
+                    <h3>Time Complexity</h3>
+                    <p>The time complexity of Dijkstra's algorithm depends on the data structure used for the priority queue:</p>
+                    <table>
+                        <tr>
+                            <th>Implementation</th>
+                            <th>Time Complexity</th>
+                        </tr>
+                        <tr>
+                            <td>Array</td>
+                            <td>O(V²)</td>
+                        </tr>
+                        <tr>
+                            <td>Binary Heap</td>
+                            <td>O((V+E) log V)</td>
+                        </tr>
+                        <tr>
+                            <td>Fibonacci Heap</td>
+                            <td>O(E + V log V)</td>
+                        </tr>
+                    </table>
+                    <p>Where V is the number of vertices and E is the number of edges in the graph.</p>
+                    
+                    <h3>Applications in Computer Science</h3>
+                    <ul>
+                        <li>Network routing protocols (OSPF)</li>
+                        <li>GPS navigation systems</li>
+                        <li>Flight scheduling</li>
+                        <li>Robot path planning</li>
+                        <li>Finding the shortest path in social networks</li>
+                        <li>Solving maze puzzles</li>
+                    </ul>
+                    
+                    <h3>Limitations</h3>
+                    <ul>
+                        <li>Cannot handle negative edge weights</li>
+                        <li>Inefficient for very large graphs without optimizations</li>
+                        <li>Not suitable for problems requiring the shortest path from every vertex to every other vertex (use Floyd-Warshall algorithm instead)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bfs-dialog" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Breadth-First Search (BFS) Explained</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="algorithm-explanation">
+                    <h3>What is Breadth-First Search?</h3>
+                    <p>Breadth-First Search (BFS) is a graph traversal algorithm that explores all the vertices of a graph at the current depth before moving on to vertices at the next depth level. It was first developed in the 1950s for path finding problems.</p>
+                    
+                    <h3>How Does It Work?</h3>
+                    <p>BFS starts at a specified source vertex and explores all its neighbors before moving to their neighbors. This creates a "breadth-first tree" where the source is the root, and each level contains vertices that are the same distance from the root.</p>
+                    
+                    <h4>Basic Algorithm Steps:</h4>
+                    <ol>
+                        <li>Create a queue and enqueue the source vertex</li>
+                        <li>Mark the source vertex as visited</li>
+                        <li>While the queue is not empty:
+                            <ul>
+                                <li>Dequeue a vertex from the queue (call it current)</li>
+                                <li>Process current (e.g., print it)</li>
+                                <li>For each unvisited neighbor of current:
+                                    <ul>
+                                        <li>Mark it as visited</li>
+                                        <li>Enqueue it</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>Pseudocode</h3>
+                    <pre>
+function BFS(Graph, source):
+    create a queue Q
+    mark source as visited
+    enqueue source into Q
+    
+    while Q is not empty:
+        v ← dequeue from Q
+        
+        for each unvisited neighbor w of v:
+            mark w as visited
+            enqueue w into Q
+                    </pre>
+                    
+                    <h3>For Shortest Path Finding</h3>
+                    <pre>
+function BFS_ShortestPath(Graph, source, target):
+    create a queue Q
+    mark source as visited
+    enqueue source into Q
+    
+    // Keep track of paths
+    previous[source] ← null
+    
+    while Q is not empty:
+        v ← dequeue from Q
+        
+        if v = target:
+            // Reconstruct and return path
+            return BuildPath(previous, source, target)
+        
+        for each unvisited neighbor w of v:
+            mark w as visited
+            previous[w] ← v
+            enqueue w into Q
+    
+    return "No path exists"
+                    </pre>
+                    
+                    <h3>Time and Space Complexity</h3>
+                    <p><strong>Time Complexity:</strong> O(V + E) where V is the number of vertices and E is the number of edges.</p>
+                    <p><strong>Space Complexity:</strong> O(V) for the queue and visited set.</p>
+                    
+                    <h3>BFS vs. Dijkstra's Algorithm</h3>
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>BFS</th>
+                            <th>Dijkstra's</th>
+                        </tr>
+                        <tr>
+                            <td>Edge weights</td>
+                            <td>Unweighted (or all equal)</td>
+                            <td>Weighted (non-negative)</td>
+                        </tr>
+                        <tr>
+                            <td>Traversal order</td>
+                            <td>By level (distance in hops)</td>
+                            <td>By accumulated distance</td>
+                        </tr>
+                        <tr>
+                            <td>Data structure</td>
+                            <td>Queue</td>
+                            <td>Priority Queue</td>
+                        </tr>
+                        <tr>
+                            <td>Time complexity</td>
+                            <td>O(V + E)</td>
+                            <td>O((V+E) log V) with binary heap</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Applications in Computer Science</h3>
+                    <ul>
+                        <li>Finding all vertices within one connected component</li>
+                        <li>Finding the shortest path in an unweighted graph</li>
+                        <li>Web crawlers</li>
+                        <li>Social networking</li>
+                        <li>Network broadcasting</li>
+                        <li>Garbage collection (e.g., mark-and-sweep)</li>
+                        <li>Finding the shortest number of moves in puzzles (e.g., Rubik's cube)</li>
+                    </ul>
+                    
+                    <h3>Advantages and Limitations</h3>
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li>Guaranteed to find the shortest path in unweighted graphs</li>
+                        <li>Simpler implementation than Dijkstra's algorithm</li>
+                        <li>Uses less memory than depth-first search for very wide graphs</li>
+                    </ul>
+                    
+                    <h4>Limitations:</h4>
+                    <ul>
+                        <li>Not suitable for weighted graphs (unless all weights are equal)</li>
+                        <li>Uses more memory than depth-first search for very deep graphs</li>
+                        <li>Cannot easily detect cycles in a graph without additional tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
