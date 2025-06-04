@@ -1,78 +1,151 @@
-# Route Planning System Using Graphs and Shortest Path Algorithms
+# 🚚 Route Planning System 
 
-A lightweight application for Speedy Deliveries Inc. to optimize local delivery routes by modeling locations as a graph and finding the shortest paths.
+## 📋 Overview
 
-## Features
+The Route Planning System is a powerful tool designed for **Speedy Deliveries Inc.** to optimize local delivery routes by modeling locations as a graph and finding the most efficient paths between them. This application provides an intuitive visual interface for route management and pathfinding algorithms.
 
-- **Graph Representation**: Dynamic visualization of cities/locations as a weighted graph
-- **Graph Operations**: Add/remove nodes and edges, update edge weights
-- **Shortest Path Algorithms**: 
-  - Dijkstra's Algorithm for weighted shortest paths
-  - Breadth-First Search (BFS) for unweighted pathfinding
-- **Visual Interface**: Interactive graph with highlighted paths and detailed results
+![Route Planning System](main.svg)
 
-## Prerequisites
+## ✨ Key Features
 
-- Python 3.7+ with pip
-- Modern web browser (Chrome, Firefox, Edge, etc.)
+- **📊 Graph Visualization**: Interactive and dynamic visualization of delivery locations as a weighted graph
+- **📍 Location Management**: Add, remove, and drag locations on an interactive canvas
+- **🛣️ Route Management**: Create, update, and remove routes between locations with custom distances
+- **🔍 Pathfinding Algorithms**: 
+  - **Dijkstra's Algorithm**: Find the shortest weighted path between locations
+  - **Breadth-First Search (BFS)**: Find the path with the fewest stops between locations
+- **📱 Responsive UI**: Clean, modern interface with educational information about algorithms
 
-## Installation
+## 🔧 Technical Implementation
 
-1. Clone this repository
-2. Install the required Python packages:
+- **Frontend**: Pure JavaScript, HTML5 Canvas for visualization
+- **Backend**: Flask Python API with RESTful endpoints
+- **Data Structure**: Graph representation with adjacency lists
+- **Algorithms**: Dijkstra's (for weighted paths) and BFS (for unweighted paths)
 
-```bash
-pip install flask flask-cors
-```
+## 📋 Requirements
 
-## Running the Application
+- **Python**: 3.7 or higher
+- **Dependencies**: Flask, Flask-CORS
+- **Browser**: Modern web browser with HTML5 support (Chrome, Firefox, Edge, Safari)
 
-1. Start the backend server:
+## 🛠️ Installation
 
-```bash
-python app.py
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/route-planning-system.git
+   cd route-planning-system
+   ```
 
-This will start the Flask server on http://localhost:5000
+2. **Set up a virtual environment** (recommended):
+   ```bash
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
 
-2. Open `index.html` in your web browser
+   # macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
+   ```
 
-You can simply double-click the file or open it through your browser's File menu.
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Usage
+## 🚀 Running the Application
 
-### Adding Locations (Nodes)
+1. **Start the backend server**:
+   ```bash
+   python app.py
+   ```
+   This will launch the Flask server on `http://localhost:5000`
 
-1. Enter a location name (e.g., "A", "New York")
-2. Specify X and Y coordinates (or click directly on the canvas to auto-fill)
-3. Click "Add Location"
+2. **Open the frontend**:
+   - Simply open `index.html` in your web browser
+   - You can double-click the file or use File > Open in your browser
 
-### Adding Routes (Edges)
+## 💻 Using the Application
 
-1. Select start and end locations from the dropdowns
-2. Enter the distance (weight) between them
-3. Click "Add Route"
+### Adding Locations
 
-### Finding Shortest Paths
+1. **Enter location details**:
+   - Name (e.g., "A", "Warehouse", "Downtown")
+   - X and Y coordinates (or click directly on the canvas to set coordinates)
+2. Click **"Add Location"**
 
-1. Select start and end locations
-2. Choose the algorithm (Dijkstra or BFS)
-3. Click "Find Path"
-4. The shortest path will be highlighted in red on the graph, and details will be displayed
+### Creating Routes
 
-### Other Operations
+1. **Select the start and end locations** from the dropdowns
+2. **Enter the distance** between them
+3. Click **"Add Route"**
 
-- **Remove Location**: Select a location and click "Remove Location"
-- **Remove Route**: Select two connected locations and click "Remove Route"
-- **Update Route**: Select two connected locations, enter a new distance, and click "Update Route"
+### Finding Optimal Paths
 
-## Project Structure
+1. **Select start and destination** locations
+2. **Choose algorithm**:
+   - **Dijkstra's Algorithm**: For finding the shortest total distance
+   - **BFS**: For finding the path with fewest stops
+3. Click **"Find Path"**
+4. View the highlighted path on the graph and detailed results
 
-- `index.html`: Frontend interface
-- `styles.css`: CSS styling for the application
-- `script.js`: Frontend JavaScript for graph visualization and API calls
-- `app.py`: Backend Python server with graph algorithms
+### Advanced Operations
 
-## Example
+- **Drag Locations**: Click and drag any location to reposition it
+- **Update Routes**: Select two connected locations and enter a new distance
+- **Remove Elements**: Delete locations or routes as needed
+- **Learn About Algorithms**: Click the info buttons to learn about each algorithm
 
-The application comes pre-loaded with a sample graph of 5 locations (A, B, C, D, E) with various connections between them to demonstrate the functionality. 
+## 🌟 Interactive Features
+
+- **Dynamic Graph Scaling**: The graph automatically scales to fit the canvas
+- **Node Dragging**: Reposition locations by dragging them
+- **Visual Feedback**: Selected paths are highlighted in red
+- **Educational Content**: Modal dialogs explaining algorithms in detail
+
+## 📊 Sample Data
+
+The application comes pre-loaded with a sample graph of 5 locations (A, B, C, D, E) with various connections between them to demonstrate functionality.
+
+## 🧩 How It Works
+
+### Backend Architecture
+
+The Flask backend provides RESTful API endpoints for:
+- Graph operations (add/remove/update nodes and edges)
+- Pathfinding algorithms (Dijkstra's and BFS)
+- In-memory graph storage
+
+### Algorithms Implementation
+
+#### Dijkstra's Algorithm
+- Uses a priority queue for efficient node selection
+- Maintains distance and previous node tracking
+- Returns the shortest path and total distance
+
+#### Breadth-First Search
+- Uses a queue to explore nodes level by level
+- Ideal for finding paths with minimal hops
+- Returns the path with fewest intermediate stops
+
+## 🔍 Troubleshooting
+
+- **Server Connection Issues**: Ensure the Flask server is running on port 5000
+- **Graph Not Visible**: Check if your browser supports HTML5 Canvas
+- **Paths Not Found**: Verify that a valid path exists between selected locations
+
+## 🤝 Contributing
+
+Contributions to enhance the Route Planning System are welcome! Feel free to:
+- Add new algorithms
+- Improve the visualization
+- Enhance the user interface
+- Optimize existing code
+
+## 📄 License
+
+This project is available for educational and commercial use.
+
+---
+
+Made with ❤️ for Speedy Deliveries Inc. 
